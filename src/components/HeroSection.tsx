@@ -1,9 +1,13 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-illustration.png";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   return (
     <section className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-gradient-surface">
       <div className="container mx-auto px-4">
@@ -24,11 +28,16 @@ const HeroSection = () => {
               Rentzy connects you with people nearby who have the tools, bikes, and gear you need — affordably, locally, and safely.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 p-2 bg-card rounded-xl shadow-card max-w-xl">
+            <form
+              onSubmit={(e) => { e.preventDefault(); navigate(`/search?q=${encodeURIComponent(query)}`); }}
+              className="flex flex-col sm:flex-row gap-3 p-2 bg-card rounded-xl shadow-card max-w-xl"
+            >
               <div className="flex items-center gap-2 flex-1 px-3">
                 <Search className="text-muted-foreground" size={18} />
                 <input
                   type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="What do you need?"
                   className="bg-transparent outline-none flex-1 text-sm text-foreground placeholder:text-muted-foreground font-body"
                 />
@@ -41,10 +50,10 @@ const HeroSection = () => {
                   className="bg-transparent outline-none flex-1 text-sm text-foreground placeholder:text-muted-foreground font-body"
                 />
               </div>
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" type="submit">
                 Search
               </Button>
-            </div>
+            </form>
 
             <div className="flex items-center gap-6 mt-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
