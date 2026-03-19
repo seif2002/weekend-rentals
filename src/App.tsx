@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import SearchResults from "./pages/SearchResults.tsx";
 import ListingDetail from "./pages/ListingDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import OwnerDashboard from "./pages/OwnerDashboard.tsx";
 
 const queryClient = new QueryClient();
 
