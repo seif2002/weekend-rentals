@@ -324,8 +324,8 @@ const SearchResults = () => {
             ) : (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {filtered.map((item, i) => (
+                  <Link key={item.id} to={`/listing/${item.id}`}>
                   <motion.div
-                    key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
