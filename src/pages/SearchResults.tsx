@@ -385,6 +385,7 @@ const SearchResults = () => {
                       </div>
                     </div>
                   </motion.div>
+                  </Link>
                 ))}
               </div>
             )}
