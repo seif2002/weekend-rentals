@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Star, Shield, SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -324,8 +324,8 @@ const SearchResults = () => {
             ) : (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {filtered.map((item, i) => (
+                  <Link key={item.id} to={`/listing/${item.id}`}>
                   <motion.div
-                    key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
@@ -385,6 +385,7 @@ const SearchResults = () => {
                       </div>
                     </div>
                   </motion.div>
+                  </Link>
                 ))}
               </div>
             )}
