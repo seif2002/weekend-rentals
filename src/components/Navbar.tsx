@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const unreadCount = 3; // Mock unread count
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -22,6 +24,14 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <a href="/messages" className="relative text-muted-foreground hover:text-foreground transition-colors p-2">
+            <MessageCircle size={20} />
+            {unreadCount > 0 && (
+              <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold px-1 border-2 border-background">
+                {unreadCount}
+              </Badge>
+            )}
+          </a>
           <Button variant="ghost" size="sm">Log In</Button>
           <Button variant="hero" size="sm">Sign Up Free</Button>
         </div>
@@ -44,6 +54,14 @@ const Navbar = () => {
               <a href="#categories" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Categories</a>
               <a href="#listings" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Featured</a>
               <a href="#owners" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>List Your Gear</a>
+              <a href="/messages" className="text-sm font-medium text-muted-foreground flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+                Messages
+                {unreadCount > 0 && (
+                  <Badge className="h-4 min-w-[16px] rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold px-1">
+                    {unreadCount}
+                  </Badge>
+                )}
+              </a>
               <div className="flex gap-3 pt-2">
                 <Button variant="ghost" size="sm" className="flex-1">Log In</Button>
                 <Button variant="hero" size="sm" className="flex-1">Sign Up</Button>

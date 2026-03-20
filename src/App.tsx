@@ -8,6 +8,7 @@ import SearchResults from "./pages/SearchResults.tsx";
 import ListingDetail from "./pages/ListingDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import OwnerDashboard from "./pages/OwnerDashboard.tsx";
+import Messages from "./pages/Messages.tsx";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/search" element={<SearchResults />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
           <Route path="/dashboard" element={<OwnerDashboard />} />
+          <Route path="/messages" element={<Messages />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
