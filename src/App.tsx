@@ -25,6 +25,7 @@ const App = () => (
           <Route path="/listing/:id" element={<ListingDetail />} />
           <Route path="/dashboard" element={<OwnerDashboard />} />
           <Route path="/messages" element={<Messages />} />
+          <Route path="/add-listing" element={<AddListing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
