@@ -8,6 +8,7 @@ import SearchResults from "./pages/SearchResults.tsx";
 import ListingDetail from "./pages/ListingDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import OwnerDashboard from "./pages/OwnerDashboard.tsx";
+import Messages from "./pages/Messages.tsx";
 
 const queryClient = new QueryClient();
 
