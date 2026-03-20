@@ -9,6 +9,7 @@ import ListingDetail from "./pages/ListingDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import OwnerDashboard from "./pages/OwnerDashboard.tsx";
 import Messages from "./pages/Messages.tsx";
+import AddListing from "./pages/AddListing.tsx";
 
 const queryClient = new QueryClient();
 
