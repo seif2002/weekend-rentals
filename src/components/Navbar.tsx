@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import NotificationCenter from "@/components/NotificationCenter";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -23,7 +24,7 @@ const Navbar = () => {
           <a href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-1">
           <a href="/messages" className="relative text-muted-foreground hover:text-foreground transition-colors p-2">
             <MessageCircle size={20} />
             {unreadCount > 0 && (
@@ -32,13 +33,17 @@ const Navbar = () => {
               </Badge>
             )}
           </a>
-          <Button variant="ghost" size="sm">Log In</Button>
+          <NotificationCenter />
+          <Button variant="ghost" size="sm" className="ml-2">Log In</Button>
           <Button variant="hero" size="sm">Sign Up Free</Button>
         </div>
 
-        <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <NotificationCenter />
+          <button className="text-foreground p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -53,7 +58,7 @@ const Navbar = () => {
               <a href="#how-it-works" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>How It Works</a>
               <a href="#categories" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Categories</a>
               <a href="#listings" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Featured</a>
-              <a href="#owners" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>List Your Gear</a>
+              <a href="/add-listing" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>List Your Gear</a>
               <a href="/messages" className="text-sm font-medium text-muted-foreground flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 Messages
                 {unreadCount > 0 && (
