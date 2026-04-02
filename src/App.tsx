@@ -13,6 +13,7 @@ import Messages from "./pages/Messages.tsx";
 import AddListing from "./pages/AddListing.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const queryClient = new QueryClient();
 
