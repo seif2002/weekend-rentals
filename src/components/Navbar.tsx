@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X, MessageCircle, User, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import NotificationCenter from "@/components/NotificationCenter";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const unreadCount = 3; // Mock unread count
+  const { user, signOut } = useAuth();
+  const unreadCount = 3;
+
+  const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "User";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -34,8 +41,37 @@ const Navbar = () => {
             )}
           </a>
           <NotificationCenter />
-          <Button variant="ghost" size="sm" className="ml-2">Log In</Button>
-          <Button variant="hero" size="sm">Sign Up Free</Button>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="ml-2 flex items-center gap-2 rounded-full hover:bg-accent p-1 transition-colors">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">{initials}</AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{displayName}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <a href="/dashboard" className="cursor-pointer"><User size={14} className="mr-2" /> Dashboard</a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive">
+                  <LogOut size={14} className="mr-2" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" className="ml-2" asChild><a href="/auth">Log In</a></Button>
+              <Button variant="hero" size="sm" asChild><a href="/auth">Sign Up Free</a></Button>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
@@ -68,8 +104,14 @@ const Navbar = () => {
                 )}
               </a>
               <div className="flex gap-3 pt-2">
-                <Button variant="ghost" size="sm" className="flex-1">Log In</Button>
-                <Button variant="hero" size="sm" className="flex-1">Sign Up</Button>
+                {user ? (
+                  <Button variant="ghost" size="sm" className="flex-1" onClick={() => { signOut(); setMobileOpen(false); }}>Sign Out</Button>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" className="flex-1" asChild><a href="/auth">Log In</a></Button>
+                    <Button variant="hero" size="sm" className="flex-1" asChild><a href="/auth">Sign Up</a></Button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
