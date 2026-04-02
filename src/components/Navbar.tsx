@@ -58,7 +58,10 @@ const Navbar = () => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <a href="/dashboard" className="cursor-pointer"><User size={14} className="mr-2" /> Dashboard</a>
+                  <a href="/profile" className="cursor-pointer"><User size={14} className="mr-2" /> Profile</a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/dashboard" className="cursor-pointer">Dashboard</a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive">

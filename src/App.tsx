@@ -32,6 +32,7 @@ const App = () => (
             <Route path="/messages" element={<Messages />} />
             <Route path="/add-listing" element={<AddListing />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
