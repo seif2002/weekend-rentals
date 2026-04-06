@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
+import { lovable } from "@/integrations/lovable/index";
 
 const Auth = () => {
   const navigate = useNavigate();
