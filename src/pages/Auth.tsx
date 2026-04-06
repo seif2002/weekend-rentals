@@ -18,6 +18,7 @@ const Auth = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
@@ -32,6 +33,21 @@ const Auth = () => {
   // Forgot password state
   const [forgotEmail, setForgotEmail] = useState("");
   const [showForgot, setShowForgot] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      toast.error("Google sign-in failed. Please try again.");
+      setGoogleLoading(false);
+      return;
+    }
+    if (result.redirected) return;
+    toast.success("Welcome!");
+    navigate("/");
+  };
 
   useEffect(() => {
     if (user) navigate("/");
