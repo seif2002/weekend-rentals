@@ -14,6 +14,9 @@ import AddListing from "./pages/AddListing.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Profile from "./pages/Profile.tsx";
+import BrowseWorkers from "./pages/BrowseWorkers.tsx";
+import WorkerSignup from "./pages/WorkerSignup.tsx";
+import WorkerDetail from "./pages/WorkerDetail.tsx";
 
 const queryClient = new QueryClient();
 
