@@ -28,6 +28,7 @@ const Navbar = () => {
           <a href="#categories" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Categories</a>
           <a href="#listings" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Featured</a>
           <a href="/add-listing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">List Your Gear</a>
+          <a href="/workers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Find Workers</a>
           <a href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
         </div>
 
@@ -98,6 +99,7 @@ const Navbar = () => {
               <a href="#categories" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Categories</a>
               <a href="#listings" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Featured</a>
               <a href="/add-listing" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>List Your Gear</a>
+              <a href="/workers" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>Find Workers</a>
               <a href="/messages" className="text-sm font-medium text-muted-foreground flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 Messages
                 {unreadCount > 0 && (

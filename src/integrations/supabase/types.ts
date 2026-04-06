@@ -53,6 +53,113 @@ export type Database = {
         }
         Relationships: []
       }
+      worker_bookings: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          description: string | null
+          estimated_hours: number | null
+          id: string
+          scheduled_date: string | null
+          scheduled_time: string | null
+          status: string | null
+          total_price: number | null
+          updated_at: string | null
+          worker_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          id?: string
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string | null
+          worker_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          id?: string
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string | null
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "worker_bookings_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workers: {
+        Row: {
+          availability: string | null
+          bio: string | null
+          certifications: string[] | null
+          created_at: string | null
+          hourly_rate: number
+          id: string
+          location: string | null
+          portfolio_urls: string[] | null
+          rating: number | null
+          skills: string[]
+          title: string
+          total_jobs: number | null
+          total_reviews: number | null
+          updated_at: string | null
+          user_id: string
+          worker_type: string | null
+        }
+        Insert: {
+          availability?: string | null
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          hourly_rate: number
+          id?: string
+          location?: string | null
+          portfolio_urls?: string[] | null
+          rating?: number | null
+          skills?: string[]
+          title: string
+          total_jobs?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          user_id: string
+          worker_type?: string | null
+        }
+        Update: {
+          availability?: string | null
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          hourly_rate?: number
+          id?: string
+          location?: string | null
+          portfolio_urls?: string[] | null
+          rating?: number | null
+          skills?: string[]
+          title?: string
+          total_jobs?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          user_id?: string
+          worker_type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
