@@ -30,6 +30,7 @@ const Navbar = () => {
           <a href="/add-listing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">List Your Gear</a>
           <a href="/workers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Find Workers</a>
           <a href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
+          <a href="/worker-dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Worker Hub</a>
         </div>
 
         <div className="hidden md:flex items-center gap-1">
