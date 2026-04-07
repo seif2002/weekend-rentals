@@ -17,6 +17,7 @@ import Profile from "./pages/Profile.tsx";
 import BrowseWorkers from "./pages/BrowseWorkers.tsx";
 import WorkerSignup from "./pages/WorkerSignup.tsx";
 import WorkerDetail from "./pages/WorkerDetail.tsx";
+import WorkerDashboard from "./pages/WorkerDashboard.tsx";
 
 const queryClient = new QueryClient();
 
