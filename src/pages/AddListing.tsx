@@ -102,16 +102,25 @@ const AddListing = () => {
   };
 
   const addPhoto = () => {
-    // Simulate photo upload with placeholder
-    const placeholders = [
-      "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1530124566582-a45a7c2ec4e0?w=400&h=300&fit=crop",
-    ];
-    if (photos.length < 8) {
-      setPhotos([...photos, { url: placeholders[photos.length % placeholders.length], name: `photo-${photos.length + 1}.jpg` }]);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || !user) return;
+    for (let i = 0; i < files.length && photos.length + i < 8; i++) {
+      const file = files[i];
+      const ext = file.name.split('.').pop();
+      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from('listings').upload(path, file);
+      if (error) {
+        toast.error(`Failed to upload ${file.name}`);
+        continue;
+      }
+      const { data: urlData } = supabase.storage.from('listings').getPublicUrl(path);
+      setPhotos((prev) => [...prev, { url: urlData.publicUrl, name: file.name }]);
     }
+    e.target.value = '';
   };
 
   const toggleRule = (rule: string) => {
