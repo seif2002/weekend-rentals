@@ -1,5 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
   Camera, DollarSign, CalendarDays, ShieldCheck, ChevronRight, ChevronLeft,
@@ -54,7 +56,10 @@ const stepAnim = {
 
 const AddListing = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
 
   // Step 1 – Details
   const [title, setTitle] = useState("");
@@ -97,16 +102,25 @@ const AddListing = () => {
   };
 
   const addPhoto = () => {
-    // Simulate photo upload with placeholder
-    const placeholders = [
-      "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1530124566582-a45a7c2ec4e0?w=400&h=300&fit=crop",
-    ];
-    if (photos.length < 8) {
-      setPhotos([...photos, { url: placeholders[photos.length % placeholders.length], name: `photo-${photos.length + 1}.jpg` }]);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || !user) return;
+    for (let i = 0; i < files.length && photos.length + i < 8; i++) {
+      const file = files[i];
+      const ext = file.name.split('.').pop();
+      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from('listings').upload(path, file);
+      if (error) {
+        toast.error(`Failed to upload ${file.name}`);
+        continue;
+      }
+      const { data: urlData } = supabase.storage.from('listings').getPublicUrl(path);
+      setPhotos((prev) => [...prev, { url: urlData.publicUrl, name: file.name }]);
     }
+    e.target.value = '';
   };
 
   const toggleRule = (rule: string) => {
@@ -133,11 +147,51 @@ const AddListing = () => {
     }
   }, [step, title, category, condition, location, photos, priceDaily]);
 
-  const handleSubmit = () => {
-    toast.success("Listing created successfully!", {
-      description: `"${title}" is now live and visible to renters nearby.`,
-    });
-    navigate("/dashboard");
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Please sign in to create a listing.");
+      navigate("/auth");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { data: listing, error } = await supabase.from("listings").insert({
+        owner_id: user.id,
+        title: title.trim(),
+        description: description.trim() || null,
+        category,
+        photos: photos.map((p) => p.url),
+        daily_rate: parseFloat(priceDaily),
+        weekend_rate: priceWeekend ? parseFloat(priceWeekend) : null,
+        weekly_rate: priceWeekly ? parseFloat(priceWeekly) : null,
+        deposit: deposit ? parseFloat(deposit) : 0,
+        delivery_radius: deliveryAvailable ? deliveryRadius[0] : null,
+        location: location.trim(),
+        rules: selectedRules,
+        status: "active",
+      }).select().single();
+
+      if (error) throw error;
+
+      // Save availability dates
+      if (availableDates.length > 0 && listing) {
+        const rows = availableDates.map((d) => ({
+          listing_id: listing.id,
+          date: d.toISOString().split("T")[0],
+          is_available: true,
+        }));
+        await supabase.from("listing_availability").insert(rows);
+      }
+
+      toast.success("Listing created successfully!", {
+        description: `"${title}" is now live and visible to renters nearby.`,
+      });
+      navigate("/dashboard");
+    } catch (err: any) {
+      toast.error("Failed to create listing", { description: err.message });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const progress = ((step + 1) / STEPS.length) * 100;
@@ -300,6 +354,14 @@ const AddListing = () => {
                             <span className="text-xs font-medium">Add Photo</span>
                           </button>
                         )}
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={handleFileChange}
+                        />
                       </div>
 
                       <div className="flex items-start gap-2 p-3 rounded-lg bg-accent/30 border border-accent">
@@ -557,9 +619,10 @@ const AddListing = () => {
                 ) : (
                   <Button
                     onClick={handleSubmit}
+                    disabled={submitting}
                     className="gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
-                    <Check size={16} /> Publish Listing
+                    <Check size={16} /> {submitting ? "Publishing..." : "Publish Listing"}
                   </Button>
                 )}
               </div>
