@@ -147,11 +147,51 @@ const AddListing = () => {
     }
   }, [step, title, category, condition, location, photos, priceDaily]);
 
-  const handleSubmit = () => {
-    toast.success("Listing created successfully!", {
-      description: `"${title}" is now live and visible to renters nearby.`,
-    });
-    navigate("/dashboard");
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Please sign in to create a listing.");
+      navigate("/auth");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { data: listing, error } = await supabase.from("listings").insert({
+        owner_id: user.id,
+        title: title.trim(),
+        description: description.trim() || null,
+        category,
+        photos: photos.map((p) => p.url),
+        daily_rate: parseFloat(priceDaily),
+        weekend_rate: priceWeekend ? parseFloat(priceWeekend) : null,
+        weekly_rate: priceWeekly ? parseFloat(priceWeekly) : null,
+        deposit: deposit ? parseFloat(deposit) : 0,
+        delivery_radius: deliveryAvailable ? deliveryRadius[0] : null,
+        location: location.trim(),
+        rules: selectedRules,
+        status: "active",
+      }).select().single();
+
+      if (error) throw error;
+
+      // Save availability dates
+      if (availableDates.length > 0 && listing) {
+        const rows = availableDates.map((d) => ({
+          listing_id: listing.id,
+          date: d.toISOString().split("T")[0],
+          is_available: true,
+        }));
+        await supabase.from("listing_availability").insert(rows);
+      }
+
+      toast.success("Listing created successfully!", {
+        description: `"${title}" is now live and visible to renters nearby.`,
+      });
+      navigate("/dashboard");
+    } catch (err: any) {
+      toast.error("Failed to create listing", { description: err.message });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const progress = ((step + 1) / STEPS.length) * 100;
