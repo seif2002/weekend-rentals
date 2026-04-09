@@ -619,9 +619,10 @@ const AddListing = () => {
                 ) : (
                   <Button
                     onClick={handleSubmit}
+                    disabled={submitting}
                     className="gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
-                    <Check size={16} /> Publish Listing
+                    <Check size={16} /> {submitting ? "Publishing..." : "Publish Listing"}
                   </Button>
                 )}
               </div>
