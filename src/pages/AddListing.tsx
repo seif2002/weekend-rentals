@@ -56,7 +56,10 @@ const stepAnim = {
 
 const AddListing = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
 
   // Step 1 – Details
   const [title, setTitle] = useState("");
