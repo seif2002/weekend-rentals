@@ -14,6 +14,216 @@ export type Database = {
   }
   public: {
     Tables: {
+      conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_message: string | null
+          last_message_at: string | null
+          listing_id: string | null
+          participant_1: string
+          participant_2: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          listing_id?: string | null
+          participant_1: string
+          participant_2: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          listing_id?: string | null
+          participant_1?: string
+          participant_2?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_availability: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          is_available: boolean | null
+          listing_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          is_available?: boolean | null
+          listing_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          is_available?: boolean | null
+          listing_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_availability_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          category: string
+          created_at: string | null
+          daily_rate: number
+          delivery_radius: number | null
+          deposit: number | null
+          description: string | null
+          id: string
+          latitude: number | null
+          location: string | null
+          longitude: number | null
+          owner_id: string
+          photos: string[] | null
+          rating: number | null
+          rules: string[] | null
+          status: string
+          title: string
+          total_reviews: number | null
+          updated_at: string | null
+          weekend_rate: number | null
+          weekly_rate: number | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string | null
+          daily_rate: number
+          delivery_radius?: number | null
+          deposit?: number | null
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          owner_id: string
+          photos?: string[] | null
+          rating?: number | null
+          rules?: string[] | null
+          status?: string
+          title: string
+          total_reviews?: number | null
+          updated_at?: string | null
+          weekend_rate?: number | null
+          weekly_rate?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          daily_rate?: number
+          delivery_radius?: number | null
+          deposit?: number | null
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          owner_id?: string
+          photos?: string[] | null
+          rating?: number | null
+          rules?: string[] | null
+          status?: string
+          title?: string
+          total_reviews?: number | null
+          updated_at?: string | null
+          weekend_rate?: number | null
+          weekly_rate?: number | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          link: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          link?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          link?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -52,6 +262,97 @@ export type Database = {
           user_type?: string | null
         }
         Relationships: []
+      }
+      rental_bookings: {
+        Row: {
+          created_at: string | null
+          deposit_amount: number | null
+          end_date: string
+          id: string
+          listing_id: string
+          notes: string | null
+          owner_id: string
+          pickup_method: string | null
+          renter_id: string
+          start_date: string
+          status: string
+          total_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deposit_amount?: number | null
+          end_date: string
+          id?: string
+          listing_id: string
+          notes?: string | null
+          owner_id: string
+          pickup_method?: string | null
+          renter_id: string
+          start_date: string
+          status?: string
+          total_price: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deposit_amount?: number | null
+          end_date?: string
+          id?: string
+          listing_id?: string
+          notes?: string | null
+          owner_id?: string
+          pickup_method?: string | null
+          renter_id?: string
+          start_date?: string
+          status?: string
+          total_price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_bookings_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: string
+          listing_id: string
+          rating: number
+          reviewer_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          rating: number
+          reviewer_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          rating?: number
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       worker_bookings: {
         Row: {
