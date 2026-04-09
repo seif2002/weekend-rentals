@@ -354,6 +354,14 @@ const AddListing = () => {
                             <span className="text-xs font-medium">Add Photo</span>
                           </button>
                         )}
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={handleFileChange}
+                        />
                       </div>
 
                       <div className="flex items-start gap-2 p-3 rounded-lg bg-accent/30 border border-accent">
