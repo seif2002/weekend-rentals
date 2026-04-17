@@ -107,17 +107,24 @@ const AddListing = () => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || !user) return;
+    if (!files) return;
+    if (!user) {
+      toast.error("Please sign in to upload photos.");
+      return;
+    }
     for (let i = 0; i < files.length && photos.length + i < 8; i++) {
       const file = files[i];
       const ext = file.name.split('.').pop();
       const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+      console.log('[AddListing] uploading photo', { path, size: file.size, type: file.type });
       const { error } = await supabase.storage.from('listings').upload(path, file);
       if (error) {
-        toast.error(`Failed to upload ${file.name}`);
+        console.error('[AddListing] photo upload error', error);
+        toast.error(`Failed to upload ${file.name}`, { description: error.message });
         continue;
       }
       const { data: urlData } = supabase.storage.from('listings').getPublicUrl(path);
+      console.log('[AddListing] uploaded', urlData.publicUrl);
       setPhotos((prev) => [...prev, { url: urlData.publicUrl, name: file.name }]);
     }
     e.target.value = '';
@@ -155,7 +162,7 @@ const AddListing = () => {
     }
     setSubmitting(true);
     try {
-      const { data: listing, error } = await supabase.from("listings").insert({
+      const payload = {
         owner_id: user.id,
         title: title.trim(),
         description: description.trim() || null,
@@ -169,9 +176,15 @@ const AddListing = () => {
         location: location.trim(),
         rules: selectedRules,
         status: "active",
-      }).select().single();
+      };
+      console.log('[AddListing] inserting listing', payload);
+      const { data: listing, error } = await supabase.from("listings").insert(payload).select().single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('[AddListing] insert error', error);
+        throw error;
+      }
+      console.log('[AddListing] listing created', listing);
 
       // Save availability dates
       if (availableDates.length > 0 && listing) {
@@ -180,7 +193,8 @@ const AddListing = () => {
           date: d.toISOString().split("T")[0],
           is_available: true,
         }));
-        await supabase.from("listing_availability").insert(rows);
+        const { error: availErr } = await supabase.from("listing_availability").insert(rows);
+        if (availErr) console.error('[AddListing] availability insert error', availErr);
       }
 
       toast.success("Listing created successfully!", {
@@ -188,7 +202,8 @@ const AddListing = () => {
       });
       navigate("/dashboard");
     } catch (err: any) {
-      toast.error("Failed to create listing", { description: err.message });
+      console.error('[AddListing] submit failed', err);
+      toast.error("Failed to create listing", { description: err.message ?? String(err) });
     } finally {
       setSubmitting(false);
     }
